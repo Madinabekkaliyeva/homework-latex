@@ -2,32 +2,23 @@ name: Build LaTeX PDF
 
 on:
   push:
-    paths:
-      - "**.tex"
-      - ".github/workflows/latex.yml"
-  workflow_dispatch:
+    branches: [ main ]
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Check out repo
+      - name: Checkout
         uses: actions/checkout@v4
 
-      # Pick ONE main .tex file to compile (change main.tex if yours is different)
       - name: Compile LaTeX
         uses: xu-cheng/latex-action@v3
         with:
           root_file: main.tex
-          # If you need biblatex/biber or multiple passes:
-          # latexmk_use_lualatex: true
-          # extra_system_packages: "biber"
-          # post_compile: "latexmk -pdf -interaction=nonstopmode main.tex"
+          latexmk_use_xelatex: true
 
-      - name: Upload PDF as artifact
+      - name: Upload PDF
         uses: actions/upload-artifact@v4
         with:
-          name: pdf
-          path: |
-            *.pdf
-            **/*.pdf
+          name: report
+          path: main.pdf
